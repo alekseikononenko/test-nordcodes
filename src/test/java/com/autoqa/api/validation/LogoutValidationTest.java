@@ -32,7 +32,7 @@ public class LogoutValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGOUT без предварительного LOGIN должен вернуть 200 OK")
+    @DisplayName("Запрос LOGOUT без предварительного LOGIN должен вернуть успешный ответ")
     @Description("LOGOUT без предварительного LOGIN. Ожидаем 200 OK.")
     @Step("LOGOUT без LOGIN")
     public void logoutWithoutLogin_shouldReturnOk() {
@@ -43,14 +43,14 @@ public class LogoutValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body LOGOUT without LOGIN", body);
+            //Allure.addAttachment("HTTP Response Body LOGOUT without LOGIN", body);
             assertEquals(200, status, "Ожидается код 200 при LOGOUT без предварительного LOGIN");
         });
     }
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGOUT с недопустимым токеном должен вернуть 400")
+    @DisplayName("Запрос LOGOUT с недопустимым токеном должен вернуть ошибку")
     @Description("LOGOUT с недопустимым токеном. Ожидаем 400.")
     @Step("LOGOUT с недопустимым токеном")
     public void logoutWithInvalidToken_shouldReturn400() {
@@ -61,7 +61,7 @@ public class LogoutValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body LOGOUT with invalid token", body);
+            //Allure.addAttachment("HTTP Response Body LOGOUT with invalid token", body);
             assertEquals(400, status, "Ожидается код 400 при LOGOUT с недопустимым токеном");
             assertEquals("ERROR", response.jsonPath().getString("result"));
         });
@@ -69,7 +69,7 @@ public class LogoutValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGOUT без токена должен вернуть 400")
+    @DisplayName("Запрос LOGOUT без токена должен вернуть ошибку")
     @Description("LOGOUT без токена. Ожидаем 400.")
     @Step("LOGOUT с отсутствующим токеном")
     public void logoutWithMissingToken_shouldReturn400() {
@@ -78,7 +78,7 @@ public class LogoutValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body LOGOUT with missing token", body);
+            //Allure.addAttachment("HTTP Response Body LOGOUT with missing token", body);
             assertEquals(400, status, "Ожидается код 400 при LOGOUT без токена");
             assertEquals("ERROR", response.jsonPath().getString("result"));
         });
@@ -86,7 +86,7 @@ public class LogoutValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("Повторный LOGOUT должен вернуть тот же результат")
+    @DisplayName("Повторный запрос LOGOUT должен вернуть тот же результат")
     @Description("Повторный LOGOUT. Результат должен быть idem (такой же, как предыдущий).")
     @Step("Повторный LOGOUT")
     public void repeatedLogout_shouldReturnSameResult() {
@@ -97,14 +97,14 @@ public class LogoutValidationTest extends BaseTest {
         int firstStatus = firstResponse.getStatusCode();
         String firstBody = firstResponse.getBody().asString();
 
-        Allure.addAttachment("HTTP Response Body First LOGOUT", firstBody);
+        //Allure.addAttachment("HTTP Response Body First LOGOUT", firstBody);
 
         // Второй LOGOUT
         Response secondResponse = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
         int secondStatus = secondResponse.getStatusCode();
         String secondBody = secondResponse.getBody().asString();
 
-        Allure.addAttachment("HTTP Response Body Second LOGOUT", secondBody);
+        //Allure.addAttachment("HTTP Response Body Second LOGOUT", secondBody);
 
         Allure.step("Проверка, что повторный LOGOUT возвращает тот же результат", () -> {
             assertEquals(firstStatus, secondStatus, "Ожидается, что повторный LOGOUT возвращает тот же код HTTP");

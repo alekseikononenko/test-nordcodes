@@ -54,7 +54,7 @@ public class RequestValidationTest {
     }
 
     @Test
-    @DisplayName("Запрос без заголовка X-Api-Key должен вернуть 401 Unauthorized")
+    @DisplayName("Запрос без заголовка X-Api-Key должен вернуть ошибку")
     @Severity(SeverityLevel.CRITICAL)
     @Description("""
 Проверка валидации запроса без заголовка X-Api-Key.
@@ -72,7 +72,7 @@ public class RequestValidationTest {
     }
 
     @Test
-    @DisplayName("Запрос с пустым значением заголовка X-Api-Key должен вернуть 401 Unauthorized")
+    @DisplayName("Запрос с пустым значением заголовка X-Api-Key должен вернуть ошибку")
     @Severity(SeverityLevel.NORMAL)
     @Description("""
 Проверка валидации запроса с пустым значением заголовка X-Api-Key.
@@ -90,7 +90,7 @@ public class RequestValidationTest {
     }
 
     @Test
-    @DisplayName("Запрос с неверным значением заголовка X-Api-Key должен вернуть 401 Unauthorized")
+    @DisplayName("Запрос с неверным значением заголовка X-Api-Key должен вернуть ошибку")
     @Severity(SeverityLevel.CRITICAL)
     @Description("""
 Проверка валидации запроса с неверным значением заголовка X-Api-Key.
@@ -108,7 +108,7 @@ public class RequestValidationTest {
     }
 
     @Test
-    @DisplayName("Запрос без параметра token должен вернуть 400 Bad Request")
+    @DisplayName("Запрос без параметра token должен вернуть ошибку")
     @Severity(SeverityLevel.NORMAL)
     @Description("""
 Проверка валидации запроса без параметра token.
@@ -126,7 +126,7 @@ public class RequestValidationTest {
     }
 
     @Test
-    @DisplayName("Запрос без параметра action должен вернуть 400 Bad Request")
+    @DisplayName("Запрос без параметра action должен вернуть ошибку")
     @Severity(SeverityLevel.NORMAL)
     @Description("""
 Проверка валидации запроса без параметра action.

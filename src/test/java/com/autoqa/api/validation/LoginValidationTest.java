@@ -65,7 +65,7 @@ public class LoginValidationTest extends BaseTest {
             Allure.step("LOGOUT после теста", () -> {
                 int status = logoutResponse.getStatusCode();
                 String body = logoutResponse.getBody().asString();
-                Allure.addAttachment("HTTP Response Body LOGOUT", body);
+                //Allure.addAttachment("HTTP Response Body LOGOUT", body);
             });
 
             lastUsedToken = null; // очищаем токен
@@ -74,11 +74,11 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @DisplayName("LOGIN с валидным токеном должен быть успешным")
+    @DisplayName("Запрос LOGIN с валидным токеном должен быть успешным")
     @Description("""
         Позитивный кейс.
         Валидный токен (реальный, принимается приложением).
-        Ожидаем успешный LOGIN.
+        Ожидаем успешный LOGIN = 200 OK.
         """)
     @Step("LOGIN с валидным токеном")
     public void loginWithValidToken_shouldReturnOk() {
@@ -91,7 +91,7 @@ public class LoginValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
             assertEquals(200, status, "Ожидается код 200 для успешного LOGIN с валидным токеном");
             assertEquals("OK", response.jsonPath().getString("result"));
         });
@@ -99,7 +99,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с коротким токеном должен вернуть 400")
+    @DisplayName("Запрос LOGIN с коротким токеном должен вернуть ошибку")
     @Description("""
         Негативный кейс.
         Длина токена меньше ожидаемой(<32).
@@ -117,7 +117,7 @@ public class LoginValidationTest extends BaseTest {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
             if (status != 400) {
-                Allure.addAttachment("HTTP Response Body", body);
+                //Allure.addAttachment("HTTP Response Body", body);
             }
             assertEquals(400, status, "Ожидается код 400 при ошибке валидации токена");
             assertEquals("ERROR", response.jsonPath().getString("result"));
@@ -126,7 +126,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с длинным токеном должен вернуть 400")
+    @DisplayName("Запрос LOGIN с длинным токеном должен вернуть ошибку")
     @Description("""
         Негативный кейс.
         Длина токена больше ожидаемой(>32).
@@ -144,7 +144,7 @@ public class LoginValidationTest extends BaseTest {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
             if (status != 400) {
-                Allure.addAttachment("HTTP Response Body", body);
+                //Allure.addAttachment("HTTP Response Body", body);
             }
             assertEquals(400, status, "Ожидается код 400 при ошибке валидации токена");
             assertEquals("ERROR", response.jsonPath().getString("result"));
@@ -153,7 +153,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с токеном с недопустимыми символами должен вернуть 400")
+    @DisplayName("Запрос LOGIN с токеном с недопустимыми символами должен вернуть ошибку")
     @Description("""
         Негативный кейс.
         Токен содержит недопустимые символы(не буквы и не цифры).
@@ -171,7 +171,7 @@ public class LoginValidationTest extends BaseTest {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
             if (status != 400) {
-                Allure.addAttachment("HTTP Response Body", body);
+                //Allure.addAttachment("HTTP Response Body", body);
             }
             assertEquals(400, status, "Ожидается код 400 при ошибке валидации токена");
             assertEquals("ERROR", response.jsonPath().getString("result"));
@@ -180,7 +180,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с токеном: буква в начале и в конце должен быть успешным")
+    @DisplayName("Запрос LOGIN с токеном: буква в начале и в конце = должен быть успешным")
     @Description("""
         Позитивный граничный кейс.
         Токен корректной длины, начинается и заканчивается буквой(A‐Z0‐9).
@@ -195,7 +195,7 @@ public class LoginValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
             assertEquals(200, status, "Ожидается код 200 для успешного LOGIN с токеном корректной структуры");
             assertEquals("OK", response.jsonPath().getString("result"));
         });
@@ -203,7 +203,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с токеном: цифра в начале и в конце должен быть успешным")
+    @DisplayName("Запрос LOGIN с токеном: цифра в начале и в конце  = должен быть успешным")
     @Description("""
         Позитивный граничный кейс.
         Токен корректной длины, начинается и заканчивается цифрой(A‐Z0‐9).
@@ -218,7 +218,7 @@ public class LoginValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
             assertEquals(200, status, "Ожидается код 200 для успешного LOGIN с токеном корректной структуры");
             assertEquals("OK", response.jsonPath().getString("result"));
         });
@@ -226,7 +226,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с токеном с чередованием букв и цифр должен быть успешным")
+    @DisplayName("Запрос LOGIN с токеном с чередованием букв и цифр = должен быть успешным")
     @Description("""
         Позитивный граничный кейс(A‐Z0‐9).
         Токен корректной длины.
@@ -242,7 +242,7 @@ public class LoginValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
             assertEquals(200, status, "Ожидается код 200 для успешного LOGIN с токеном корректной структуры");
             assertEquals("OK", response.jsonPath().getString("result"));
         });
@@ -250,7 +250,7 @@ public class LoginValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGIN с токеном, состоящим только из цифр, должен быть успешным")
+    @DisplayName("Запрос LOGIN с токеном, состоящим только из цифр = должен быть успешным")
     @Description("""
         Позитивный граничный кейс(A‐Z0‐9).
         Токен корректной длины.
@@ -268,7 +268,7 @@ public class LoginValidationTest extends BaseTest {
         Allure.step("Проверка HTTP-кода и тела ответа", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
             assertEquals(200, status, "Ожидается код 200 для успешного LOGIN с токеном корректной структуры");
             assertEquals("OK", response.jsonPath().getString("result"));
         });

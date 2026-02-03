@@ -56,7 +56,7 @@ public class ActionValidationTest extends BaseTest {
         Allure.step("Проверка ответа ACTION без LOGIN", () -> {
             int status = response.getStatusCode();
             String body = response.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
 
             assertEquals(400, status, "Ожидается код 400 при попытке ACTION без LOGIN");
             assertEquals("ERROR", response.jsonPath().getString("result"));
@@ -65,7 +65,7 @@ public class ActionValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @DisplayName("ACTION после LOGOUT должен вернуть ошибку")
+    @DisplayName("Запрос ACTION после LOGOUT должен вернуть ошибку")
     @Description("""
         ACTION после LOGOUT.
         Ожидаем отказ, так как сессия завершена.
@@ -89,7 +89,7 @@ public class ActionValidationTest extends BaseTest {
         Allure.step("Проверка ACTION после LOGOUT", () -> {
             int status = actionResponse.getStatusCode();
             String body = actionResponse.getBody().asString();
-            Allure.addAttachment("HTTP Response Body", body);
+            //Allure.addAttachment("HTTP Response Body", body);
 
             assertEquals(400, status, "Ожидается код 400 при ACTION после LOGOUT");
             assertEquals("ERROR", actionResponse.jsonPath().getString("result"));
@@ -98,7 +98,7 @@ public class ActionValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("ACTION с невалидным токеном должен вернуть 400")
+    @DisplayName("Запрос ACTION с невалидным токеном должен вернуть ошибку")
     @Description("""
         ACTION с невалидным токеном.
         Нарушение формата токена.
@@ -115,7 +115,7 @@ public class ActionValidationTest extends BaseTest {
             String body = response.getBody().asString();
 
             if (status != 400) {
-                Allure.addAttachment("HTTP Response Body", body);
+                //Allure.addAttachment("HTTP Response Body", body);
             }
 
             assertEquals(400, status, "Ожидается код 400 при ACTION с невалидным токеном");
@@ -125,7 +125,7 @@ public class ActionValidationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("ACTION без токена должен вернуть 400")
+    @DisplayName("Запрос ACTION без токена должен вернуть ошибку")
     @Description("""
         ACTION без передачи токена.
         Ожидаем ошибку валидации запроса 400.
@@ -139,7 +139,7 @@ public class ActionValidationTest extends BaseTest {
             String body = response.getBody().asString();
 
             if (status != 400) {
-                Allure.addAttachment("HTTP Response Body", body);
+                //Allure.addAttachment("HTTP Response Body", body);
             }
 
             assertEquals(400, status, "Ожидается код 400 при ACTION без токена");

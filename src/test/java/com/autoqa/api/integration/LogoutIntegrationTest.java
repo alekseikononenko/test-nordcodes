@@ -41,7 +41,7 @@ public class LogoutIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @DisplayName("LOGOUT после успешного LOGIN должен вернуть 200 OK")
+    @DisplayName("Запрос LOGOUT после успешного LOGIN должен вернуть успешный ответ")
     @Description("LOGOUT после успешного LOGIN. Ожидаем 200 OK.")
     @Step("LOGOUT после LOGIN")
     public void logoutAfterLogin_shouldReturnOk() {
@@ -52,7 +52,7 @@ public class LogoutIntegrationTest extends BaseTest {
         lastUsedToken = token;
 
         Allure.step("Проверка успешного LOGIN", () -> {
-            Allure.addAttachment("LOGIN response", loginResponse.getBody().asString());
+            //Allure.addAttachment("LOGIN response", loginResponse.getBody().asString());
             assertEquals(200, loginResponse.getStatusCode(), "Ожидается код 200 для успешного LOGIN перед LOGOUT");
         });
 
@@ -60,27 +60,27 @@ public class LogoutIntegrationTest extends BaseTest {
         Response logoutResponse = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
 
         Allure.step("Проверка успешного LOGOUT", () -> {
-            Allure.addAttachment("LOGOUT response", logoutResponse.getBody().asString());
+            //Allure.addAttachment("LOGOUT response", logoutResponse.getBody().asString());
             assertEquals(200, logoutResponse.getStatusCode(), "Ожидается код 200 для успешного LOGOUT");
         });
     }
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @DisplayName("LOGIN после LOGOUT с тем же токеном должен вернуть 200 OK")
-    @Description("LOGIN → LOGOUT → LOGIN с тем же токеном. Ожидаем повторный LOGIN = OK.")
+    @DisplayName("Запрос LOGIN после LOGOUT с тем же токеном должен вернуть успешный ответ")
+    @Description("LOGIN → LOGOUT → LOGIN с тем же токеном. Ожидаем повторный LOGIN = 200 OK.")
     @Step("LOGIN после LOGOUT")
     public void loginAfterLogout_shouldReturnOk() {
         String token = TestDataGenerator.generateToken();
 
         // LOGIN
         Response firstLogin = ApiClient.sendPost(token, "LOGIN", Config.API_KEY);
-        Allure.addAttachment("First LOGIN", firstLogin.getBody().asString());
+        //Allure.addAttachment("First LOGIN", firstLogin.getBody().asString());
         assertEquals(200, firstLogin.getStatusCode(), "Ожидается код 200 для первого LOGIN");
 
         // LOGOUT
         Response logout = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
-        Allure.addAttachment("LOGOUT", logout.getBody().asString());
+        //Allure.addAttachment("LOGOUT", logout.getBody().asString());
         assertEquals(200, logout.getStatusCode(), "Ожидается код 200 для LOGOUT");
 
         // Повторный LOGIN
@@ -88,7 +88,7 @@ public class LogoutIntegrationTest extends BaseTest {
         lastUsedToken = token;
 
         Allure.step("Проверка повторного LOGIN после LOGOUT", () -> {
-            Allure.addAttachment("Second LOGIN", secondLogin.getBody().asString());
+            //Allure.addAttachment("Second LOGIN", secondLogin.getBody().asString());
             assertEquals(200, secondLogin.getStatusCode(), "Ожидается код 200 для повторного LOGIN после LOGOUT");
             assertEquals("OK", secondLogin.jsonPath().getString("result"));
         });
@@ -96,7 +96,7 @@ public class LogoutIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("LOGOUT без предварительного LOGIN должен вернуть 200 OK")
+    @DisplayName("Запрос LOGOUT без предварительного LOGIN должен вернуть успешный ответ")
     @Description("LOGOUT без предварительного LOGIN. Ожидаем 200 OK.")
     @Step("LOGOUT без LOGIN")
     public void logoutWithoutLogin_shouldReturnOk() {
@@ -105,14 +105,14 @@ public class LogoutIntegrationTest extends BaseTest {
         Response response = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
 
         Allure.step("Проверка ответа LOGOUT без LOGIN", () -> {
-            Allure.addAttachment("LOGOUT response", response.getBody().asString());
+            //Allure.addAttachment("LOGOUT response", response.getBody().asString());
             assertEquals(200, response.getStatusCode(), "Ожидается код 200 при LOGOUT без предварительного LOGIN");
         });
     }
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @DisplayName("Повторный LOGOUT должен вернуть тот же результат")
+    @DisplayName("Повторный запрос LOGOUT должен вернуть тот же успешный результат")
     @Description("Повторный LOGOUT одного и того же токена. Ожидаем тот же результат.")
     @Step("Повторный LOGOUT")
     public void repeatedLogout_shouldReturnSameResult() {
@@ -124,18 +124,18 @@ public class LogoutIntegrationTest extends BaseTest {
 
         // Первый LOGOUT
         Response firstLogout = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
-        Allure.addAttachment("First LOGOUT", firstLogout.getBody().asString());
+        //Allure.addAttachment("First LOGOUT", firstLogout.getBody().asString());
         assertEquals(200, firstLogout.getStatusCode(), "Ожидается код 200 для первого LOGOUT");
 
         // Повторный LOGOUT
         Response secondLogout = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
-        Allure.addAttachment("Second LOGOUT", secondLogout.getBody().asString());
+        //Allure.addAttachment("Second LOGOUT", secondLogout.getBody().asString());
         assertEquals(200, secondLogout.getStatusCode(), "Ожидается код 200 для повторного LOGOUT");
     }
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @DisplayName("LOGOUT при недоступности внешнего /auth сервиса должен вернуть 500")
+    @DisplayName("Запрос LOGOUT при недоступности внешнего /auth сервиса должен вернуть 5xx")
     @Description("LOGOUT при недоступности внешнего /auth сервиса.")
     @Step("LOGOUT при ошибке внешнего сервиса")
     public void logoutWhenAuthServiceUnavailable_shouldReturnServerError() {
@@ -149,7 +149,7 @@ public class LogoutIntegrationTest extends BaseTest {
         Response response = ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
 
         Allure.step("Проверка серверной ошибки", () -> {
-            Allure.addAttachment("LOGOUT response", response.getBody().asString());
+            //Allure.addAttachment("LOGOUT response", response.getBody().asString());
             assertEquals(500, response.getStatusCode(), "Ожидается код 500 при недоступности внешнего /auth сервиса");
         });
     }

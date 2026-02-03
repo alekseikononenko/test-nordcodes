@@ -58,9 +58,9 @@ public class ActionIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @Description("ACTION после успешного LOGIN. Ожидаем 200 OK.")
+    @Description("Запрос ACTION, после успешного запроса LOGIN должен вернуть 200 OK.")
     @Step("ACTION после LOGIN")
-    @DisplayName("ACTION после успешного LOGIN должен вернуть 200 OK")
+    @DisplayName("Запрос ACTION после успешного запроса LOGIN должен вернуть успешный ответ")
     public void actionAfterLogin_shouldReturnOk() {
         String token = TestDataGenerator.generateToken();
 
@@ -70,10 +70,7 @@ public class ActionIntegrationTest extends BaseTest {
         lastUsedToken = token;
 
         Allure.step("Проверка успешного LOGIN", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body LOGIN",
-                    loginResponse.getBody().asString()
-            );
+
             assertEquals(200, loginResponse.getStatusCode());
         });
 
@@ -82,10 +79,7 @@ public class ActionIntegrationTest extends BaseTest {
                 ApiClient.sendPost(token, "ACTION", Config.API_KEY);
 
         Allure.step("Проверка ACTION", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body ACTION",
-                    actionResponse.getBody().asString()
-            );
+
             assertEquals(200, actionResponse.getStatusCode());
             assertEquals("OK", actionResponse.jsonPath().getString("result"));
         });
@@ -93,9 +87,9 @@ public class ActionIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @Description("ACTION без LOGIN. Ожидаем ошибку.")
+    @Description("Запрос ACTION без предварительного LOGIN должен вернуть ошибку доступа/отсутствия токена.")
     @Step("ACTION без LOGIN")
-    @DisplayName("ACTION без предварительного LOGIN должен вернуть ошибку")
+    @DisplayName("Запрос ACTION без предварительного LOGIN должен вернуть ошибку")
     public void actionWithoutLogin_shouldReturnError() {
         String token = TestDataGenerator.generateToken();
 
@@ -103,10 +97,7 @@ public class ActionIntegrationTest extends BaseTest {
                 ApiClient.sendPost(token, "ACTION", Config.API_KEY);
 
         Allure.step("Проверка ошибки", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body",
-                    response.getBody().asString()
-            );
+
             int status = response.getStatusCode();
             // Ожидается один из кодов 400, 401, 403 при ошибке авторизации
             boolean validStatus = status == 400 || status == 401 || status == 403;
@@ -116,9 +107,9 @@ public class ActionIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @Description("ACTION после LOGOUT. Ожидаем ошибку.")
+    @Description("Запрос ACTION после LOGOUT должен вернуть ошибку доступа/отсутствия токена.")
     @Step("ACTION после LOGOUT")
-    @DisplayName("ACTION после LOGOUT должен вернуть ошибку")
+    @DisplayName("Запрос ACTION после LOGOUT должен вернуть ошибку")
     public void actionAfterLogout_shouldReturnError() {
         String token = TestDataGenerator.generateToken();
 
@@ -130,10 +121,7 @@ public class ActionIntegrationTest extends BaseTest {
                 ApiClient.sendPost(token, "LOGOUT", Config.API_KEY);
 
         Allure.step("LOGOUT", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body LOGOUT",
-                    logoutResponse.getBody().asString()
-            );
+
             assertEquals(200, logoutResponse.getStatusCode());
         });
 
@@ -142,10 +130,7 @@ public class ActionIntegrationTest extends BaseTest {
                 ApiClient.sendPost(token, "ACTION", Config.API_KEY);
 
         Allure.step("ACTION после LOGOUT", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body ACTION",
-                    actionResponse.getBody().asString()
-            );
+
             int status = actionResponse.getStatusCode();
             // Ожидается один из кодов 400, 401, 403 при ошибке авторизации после LOGOUT
             boolean validStatus = status == 400 || status == 401 || status == 403;
@@ -155,9 +140,9 @@ public class ActionIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.NORMAL)
     @Test
-    @Description("Повторный ACTION с тем же токеном. Ожидаем OK или idem.")
+    @Description("Повторный запрос ACTION с тем же токеном. Ожидаем OK или idem.")
     @Step("Повторный ACTION")
-    @DisplayName("Повторный ACTION с тем же токеном должен вернуть 200 или тот же результат")
+    @DisplayName("Повторный запрос ACTION с тем же токеном авторизации должен вернуть успешный ответ")
     public void repeatedActionWithSameToken_shouldReturnOkOrSameResult() {
         String token = TestDataGenerator.generateToken();
 
@@ -174,14 +159,7 @@ public class ActionIntegrationTest extends BaseTest {
                 ApiClient.sendPost(token, "ACTION", Config.API_KEY);
 
         Allure.step("Проверка повторного ACTION", () -> {
-            Allure.addAttachment(
-                    "HTTP Response Body First ACTION",
-                    firstAction.getBody().asString()
-            );
-            Allure.addAttachment(
-                    "HTTP Response Body Second ACTION",
-                    secondAction.getBody().asString()
-            );
+
             assertEquals(200, firstAction.getStatusCode(), "Ожидается код ответа 200 при первом ACTION");
             assertEquals(200, secondAction.getStatusCode(), "Ожидается код ответа 200 при повторном ACTION с тем же токеном");
         });
@@ -189,9 +167,9 @@ public class ActionIntegrationTest extends BaseTest {
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @Description("ACTION при недоступности внешнего сервиса /auth.")
+    @Description("Запрос ACTION при недоступности внешнего сервиса /auth должен вернуть ошибку 500")
     @Step("ACTION при ошибке /auth")
-    @DisplayName("ACTION при недоступности внешнего /auth сервиса должен вернуть 500")
+    @DisplayName("Запрос ACTION при недоступности внешнего /auth сервиса должен вернуть ошибку 5xx")
     public void actionWhenAuthServiceUnavailable_shouldReturnServerError() {
         String token = TestDataGenerator.generateToken();
 
@@ -208,20 +186,16 @@ public class ActionIntegrationTest extends BaseTest {
 
         Allure.step("Проверка ошибки сервера", () -> {
             int status = response.getStatusCode();
-            Allure.addAttachment("HTTP Status Code", String.valueOf(status));
-            Allure.addAttachment(
-                    "HTTP Response Body",
-                    response.getBody().asString()
-            );
+
             assertEquals(500, status, "Ожидается код ответа 500 при недоступности /auth");
         });
     }
 
     @Severity(SeverityLevel.CRITICAL)
     @Test
-    @Description("ACTION при недоступности внешнего сервиса /doAction.")
+    @Description("Запрос ACTION при недоступности внешнего сервиса /doAction должен вернуть ошибку 500")
     @Step("ACTION при недоступности /doAction")
-    @DisplayName("ACTION при недоступности внешнего /doAction сервиса должен вернуть 500")
+    @DisplayName("Запрос ACTION при недоступности внешнего /doAction сервиса должен вернуть ошибку 5xx")
     public void actionWhenDoActionServiceUnavailable_shouldReturnServerError() {
         String token = TestDataGenerator.generateToken();
 
@@ -240,11 +214,7 @@ public class ActionIntegrationTest extends BaseTest {
 
         Allure.step("Проверка ошибки ACTION при недоступности /doAction", () -> {
             int status = response.getStatusCode();
-            Allure.addAttachment("HTTP Status Code", String.valueOf(status));
-            Allure.addAttachment(
-                    "HTTP Response Body",
-                    response.getBody().asString()
-            );
+
             assertEquals(500, status, "Ожидается код ответа 500 при недоступности /doAction");
         });
     }
